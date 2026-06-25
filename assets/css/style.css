@@ -21,7 +21,7 @@
   --ease:cubic-bezier(.16,.84,.44,1);
 }
 
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   font-family:'Outfit',system-ui,sans-serif;
   background:var(--paper);
@@ -318,7 +318,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;line-hei
   animation:drift 16s ease-in-out infinite}
 .orb.clay{background:radial-gradient(circle at 30% 30%,var(--clay),transparent 70%);animation-duration:22s}
 @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-50px) scale(1.12)}66%{transform:translate(-30px,30px) scale(.92)}}
-section{position:relative}
+section{position:relative;overflow-x:clip}
 section > .wrap{position:relative;z-index:1}
 
 /* card glare on 3D tilt */
@@ -531,7 +531,8 @@ section > .wrap{position:relative;z-index:1}
   /* hero */
   .hero{min-height:92vh}
   .hero-inner{max-width:100%}
-  .hero h1{margin:18px 0 20px}
+  .hero h1{margin:18px 0 20px;font-size:clamp(40px,12vw,64px)}
+  .hero-veil{background:linear-gradient(to top,rgba(251,248,242,.94),rgba(251,248,242,.74) 60%,rgba(251,248,242,.6))}
   .hero .lead{font-size:15px;margin-bottom:34px}
   .hero-actions{flex-direction:column;align-items:stretch;gap:12px;width:100%}
   .hero-actions .btn{justify-content:center;width:100%}

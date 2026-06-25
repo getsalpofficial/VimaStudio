@@ -164,6 +164,7 @@ function initParallax(){
 
 /* ---------- inject decorative orbs ---------- */
 function initOrbs(){
+  if(innerWidth < 900) return;  // skip decorative bleed on tablet/mobile (avoids overflow)
   $$('.section, .quote, .cta').forEach((s,i)=>{
     if(s.querySelector('.orb')) return;
     const o=document.createElement('div');
