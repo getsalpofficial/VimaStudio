@@ -45,13 +45,25 @@ function initNav(){
   const nav = $('#nav'); if(!nav) return;
   const onScroll = ()=>nav.classList.toggle('scrolled', scrollY>40);
   onScroll(); addEventListener('scroll', onScroll, {passive:true});
+
   const burger = $('#burger');
-  if(burger) burger.addEventListener('click', ()=>nav.classList.toggle('open'));
-  // active link
-  const here = location.pathname.split('/').pop() || 'index.html';
-  $$('.nav-links a').forEach(a=>{
-    if(a.getAttribute('href')===here) a.classList.add('active');
-  });
+  if(burger){
+    burger.setAttribute('aria-expanded','false');
+    burger.addEventListener('click', ()=>{
+      const open=nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open?'true':'false');
+    });
+  }
+  // close the mobile menu when a link is tapped or when tapping outside
+  const close=()=>{ nav.classList.remove('open'); if(burger) burger.setAttribute('aria-expanded','false'); };
+  $$('.nav-links a').forEach(a=>a.addEventListener('click', close));
+  document.addEventListener('click', e=>{ if(nav.classList.contains('open') && !nav.contains(e.target)) close(); });
+  addEventListener('resize', ()=>{ if(innerWidth>980) close(); });
+
+  // active link — robust against clean URLs (/about) and .html (/about.html)
+  const norm=p=>{ p=(p.split('/').pop()||'').replace(/\.html$/,''); return p===''?'index':p; };
+  const here=norm(location.pathname);
+  $$('.nav-links a').forEach(a=>{ if(norm(a.getAttribute('href'))===here) a.classList.add('active'); });
 }
 
 /* ---------- reveal on scroll ---------- */
@@ -296,6 +308,7 @@ function initHero3D(){
   const host=$('#heroStage');
   if(!host || typeof THREE==='undefined') return;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if(innerWidth < 768) return;  // skip heavy WebGL on phones (perf/battery)
 
   const canvas=document.createElement('canvas'); canvas.className='hero-canvas';
   host.appendChild(canvas);
